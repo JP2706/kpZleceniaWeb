@@ -1,0 +1,81 @@
+﻿@page "/rejestracja"
+@using kpZleceniaWeb.Client.Layout
+@layout EmptyLayout
+
+<PageTitle>Stwórz nowe konto</PageTitle>
+
+<FluentStack Style="margin-top:85px;" Orientation="Orientation.Vertical" HorizontalAlignment="HorizontalAlignment.Center">
+    @* <FluentStack Style="margin-bottom: 15px;" HorizontalAlignment="HorizontalAlignment.Center">
+        <img class="logo" src="/images/cloud_logo.png" alt="Logo" />
+    </FluentStack> *@
+    <div class="register-form">
+        <FluentLabel Style="margin-bottom: 10px;" Typo="Typography.H4">Stwórz nowe konto</FluentLabel>
+        @if (_showErrors)
+        {
+            <div class="alert alert-danger" role="alert">
+                @foreach (var error in _errors)
+                {
+                    <div>@error</div>
+                }
+            </div>
+        }
+        <EditForm Model="_command" OnValidSubmit="Save">
+            <DataAnnotationsValidator />
+         <FluentStack Orientation="Orientation.Vertical">
+                    <FluentTextField Style="width: 100%" Label="Wprowadź adres e-mail:" @bind-Value="_command.Email" Required
+                                     TextFieldType="TextFieldType.Email"
+                                     Placeholder="Adres e-mail" />
+                    <FluentValidationMessage For="@(() => _command.Email)" />
+
+                    <FluentTextField Style="width: 100%" Label="Wprowadź imię:" @bind-Value="_command.FirstName" Required
+                                     Placeholder="Imie" />
+                    <FluentValidationMessage For="@(() => _command.FirstName)" />
+
+                    <FluentTextField Style="width: 100%" Label="Wprowadź nazwisko:" @bind-Value="_command.LastName" Required
+                                     Placeholder="Nazwisko" />
+                    <FluentValidationMessage For="@(() => _command.LastName)" />
+
+                    <FluentTextField Style="width: 100%" Label="Wprowadź hasło:" @bind-Value="_command.Password" Required
+                                     TextFieldType="TextFieldType.Password"
+                                     Placeholder="Hasło" />
+                    <FluentValidationMessage For="@(() => _command.Password)" />
+
+                    <FluentTextField Style="width: 100%" Label="Potwierdź hasło:" @bind-Value="_command.ConfirmPassword" Required
+                                     TextFieldType="TextFieldType.Password"
+                                     Placeholder="Hasło" />
+                    <FluentValidationMessage For="@(() => _command.ConfirmPassword)" />
+                    <FluentStack HorizontalAlignment="HorizontalAlignment.End">
+
+                        <FluentLabel Style="font-size: 0.8125rem; margin-right: 45px;"
+                                     Typo="Typography.Body">
+                            Masz już swoje konto?
+                            <a style="text-decoration:none;" href="/logowanie">Zaloguj się</a>
+                        </FluentLabel>
+                    @if (_savingData)
+                    {
+                                <FluentButton Style="margin-top: 15px;" Disabled="true">
+                                    <FluentStack Orientation="Orientation.Horizontal">
+                                        <FluentProgressRing Width="15px"></FluentProgressRing>
+                                        Rejestracja...
+                                    </FluentStack>
+                                </FluentButton>
+                    }
+                    else
+                    {
+                                <FluentButton Style="margin-top: 15px;" Type="ButtonType.Submit">
+                                    Rejestruj
+                                </FluentButton>
+                    }
+                    </FluentStack>
+
+                </FluentStack>    
+               
+            
+             </EditForm>
+    </div>
+</FluentStack>
+
+@if(test != null)
+{
+    @test
+}

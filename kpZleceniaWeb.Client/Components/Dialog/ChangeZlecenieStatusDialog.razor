@@ -1,0 +1,40 @@
+﻿@using kpZleceniaWeb.Client.Models.Components.Dialog
+@using kpZleceniaWeb.Shared.Common
+@implements IDialogContentComponent<ChangeZlecenieStatusDialogModel>
+
+    <FluentDialogBody>
+        <FluentStack Orientation="Orientation.Vertical">
+        <FluentLabel>Status zamówienia:</FluentLabel>
+        <FluentCombobox Style="width:100%;" TOption="pAppComboDto" Items="Content.ItemList"
+                        OptionText="@(x => x.Property["Nazwa"].ToString())" @bind-SelectedOption="_cmbZlecenieStatusSelectedItem" />
+        </FluentStack>
+    </FluentDialogBody>
+
+    <FluentDialogFooter>
+        <FluentButton OnClick="Save">Zarwierdź</FluentButton>
+    </FluentDialogFooter>
+
+@code{
+    [Parameter]
+    public ChangeZlecenieStatusDialogModel Content { get; set; }
+
+    [CascadingParameter]
+    public FluentDialog Dialog { get; set; }
+
+    private pAppComboDto _cmbZlecenieStatusSelectedItem;
+
+    protected override void OnInitialized()
+    {
+        if(Content.ItemList.Count != 0)
+        {
+            _cmbZlecenieStatusSelectedItem = Content.ItemList.FirstOrDefault(x => x.Property["Id"].ToString() == Content.CurrentZlecenieStausId.ToString());
+        }
+        
+    }
+
+    private async Task Save()
+    {
+        await Dialog.CloseAsync(_cmbZlecenieStatusSelectedItem);
+    }
+
+}

@@ -1,0 +1,54 @@
+﻿@inherits KpBaseForm
+@page "/indeksy/typurzadzenialista"
+@using kpZleceniaWeb.Shared.Urzadzenie.TypUrzadzenia.Dto
+
+<PageTitle>Lista indeksów - Typ Urządzenia</PageTitle>
+
+@if(_isLoading)
+{
+    <Loading Loading_="_isLoading" />
+}
+else
+{
+    <FluentGrid>
+        <FluentGridItem lg="2">
+
+        </FluentGridItem>
+        <FluentGridItem lg="8">
+            <FluentStack Orientation="Orientation.Horizontal">
+                <FluentButton OnClick="AddOnClick">Dodaj</FluentButton>
+            </FluentStack>
+            <div class="platf mt-10">
+                <FluentDataGrid AutoFit="false" TGridItem="GetTypUrzadzeniaDto" Items="_dtgTypyUrzadzeniaLista.AsQueryable()" Pagination="_dtgTypyUrzadzeniaListaPagination">
+                    <EmptyContent>
+                        <FluentLabel>Brak danych do wyświetlenia!</FluentLabel>
+                    </EmptyContent>
+                    <ChildContent>
+                        @*  <PropertyColumn Sortable="true" Property="x => x.Id" Title="Lp." /> *@
+                        <PropertyColumn Sortable="true" Property="x => x.Nazwa" Title="Nazwa typu" />
+                        <TemplateColumn Title="Akcje">
+                            <FluentButton OnClick="@(() => EditOnClick(context))">Edytuj</FluentButton>
+                            <FluentButton OnClick="@(() => DeleteOnClick(context.Id))">Usuń</FluentButton>
+                        </TemplateColumn>
+                    </ChildContent>
+                   
+                </FluentDataGrid>
+                <FluentPaginator State="_dtgTypyUrzadzeniaListaPagination">
+                    <SummaryTemplate>
+                        Liczba rekordów: <strong>@(_dtgTypyUrzadzeniaListaPagination.TotalItemCount)</strong>
+                    </SummaryTemplate>
+                    <PaginationTextTemplate>
+                        Strona <strong>@(_dtgTypyUrzadzeniaListaPagination.CurrentPageIndex + 1)</strong> z
+                        <strong>@(_dtgTypyUrzadzeniaListaPagination.LastPageIndex + 1)</strong>
+                    </PaginationTextTemplate>
+                </FluentPaginator>
+           </div>
+        </FluentGridItem>
+        <FluentGridItem lg="2">
+
+        </FluentGridItem>
+    </FluentGrid>
+    
+   
+}
+

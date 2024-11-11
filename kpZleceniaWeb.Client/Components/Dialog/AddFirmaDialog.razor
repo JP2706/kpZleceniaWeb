@@ -1,0 +1,73 @@
+﻿@using kpZleceniaWeb.Client.Pages
+@using kpZleceniaWeb.Shared.Firma.Command
+@implements IDialogContentComponent<AddEditFirmaCommand>
+
+<FluentDialogHeader>
+    Dodaj Firmę
+</FluentDialogHeader>
+<EditForm Model="Content" OnValidSubmit="Save">
+    <DataAnnotationsValidator />
+<FluentDialogBody>
+        <FluentStack Orientation="Orientation.Vertical">
+            <FluentTextField Label="Nip:" @bind-Value="@Content.Nip" Style="width:100%;"/>
+        </FluentStack>
+        <FluentStack Class="mt-10" Orientation="Orientation.Horizontal">
+            <FluentStack Orientation="Orientation.Vertical">
+                @* <FluentLabel>Nazwa:</FluentLabel> *@
+                <FluentTextField Label="Nazwa:" @bind-Value="@Content.Nazwa" />
+            </FluentStack>
+            <FluentStack Orientation="Orientation.Vertical">
+                @* <FluentLabel>Telefon:</FluentLabel> *@
+                <FluentTextField Label="Telefon:" @bind-Value="@Content.Telefon" />
+            </FluentStack>
+            <FluentStack Orientation="Orientation.Vertical">
+                @* <FluentLabel>Adres E-mail:</FluentLabel> *@
+                <FluentTextField Label="Adres E-mail:" @bind-Value="@Content.Email" />
+            </FluentStack>
+        </FluentStack>
+        <FluentStack Class="mt-10" Orientation="Orientation.Horizontal">
+            <FluentStack Orientation="Orientation.Vertical">
+                @* <FluentLabel>Ulica:</FluentLabel> *@
+                <FluentTextField Label="Ulica:" @bind-Value="@Content.Ulica" />
+            </FluentStack>
+            <FluentStack Orientation="Orientation.Vertical">
+                @* <FluentLabel>Numer domu:</FluentLabel> *@
+                <FluentTextField Label="Numer domu:" @bind-Value="@Content.NumerDomu" />
+            </FluentStack>
+            <FluentStack Orientation="Orientation.Vertical">
+                @* <FluentLabel>Numer Lokalu:</FluentLabel> *@
+                <FluentTextField Label="Numer Lokalu:" @bind-Value="@Content.NumerLokalu" />
+            </FluentStack>
+        </FluentStack>
+        <FluentStack Class="mt-10" Orientation="Orientation.Horizontal">
+            <FluentStack Orientation="Orientation.Vertical">
+                @* <FluentLabel>Miejscowosć:</FluentLabel> *@
+                <FluentTextField Label="Miejscowosć:" Style="width:100%;" @bind-Value="@Content.Miejscowosc" />
+            </FluentStack>
+            <FluentStack Orientation="Orientation.Vertical">
+                @* <FluentLabel>Kod Pocztowy:</FluentLabel> *@
+                <FluentTextField Label="Kod Pocztowy:" Style="width:100%;" @bind-Value="@Content.KodPocztowy" />
+            </FluentStack>
+            <FluentStack Orientation="Orientation.Vertical">
+                @* <FluentLabel>Poczta:</FluentLabel> *@
+                <FluentTextField Label="Poczta:" Style="width:100%;" @bind-Value="@Content.Poczta" />
+            </FluentStack>
+        </FluentStack>
+    </FluentDialogBody>
+<FluentDialogFooter Visible="true">
+    <FluentButton Type="ButtonType.Submit">Zapisz</FluentButton>
+</FluentDialogFooter>
+</EditForm>
+@code {
+    [Parameter]
+    public AddEditFirmaCommand Content { get; set; }
+
+    [CascadingParameter]
+    public FluentDialog Dialog { get; set; }
+
+
+    private async Task Save()
+    {
+        await Dialog.CloseAsync(Content); 
+    }
+}

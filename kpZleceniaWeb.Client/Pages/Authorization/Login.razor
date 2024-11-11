@@ -1,0 +1,68 @@
+﻿@page "/logowanie"
+@using kpZleceniaWeb.Client.Layout
+
+@layout EmptyLayout
+
+<PageTitle>Zaloguj się do aplikacji</PageTitle>
+
+<FluentStack Style="margin-top:170px;" Orientation="Orientation.Vertical" HorizontalAlignment="HorizontalAlignment.Center">
+   @*  <FluentStack Style="margin-bottom: 15px;" HorizontalAlignment="HorizontalAlignment.Center">
+        
+            <img class="logo" src="/images/logo.png" alt="Logo" />
+        
+    </FluentStack>
+ *@
+    <div class="login-form">
+        @if (_showLoginError)
+        {
+            <div class="alert alert-danger mx-4" role="alert">
+                <div>@_error</div>
+            </div>
+        }
+        <FluentLabel Style="margin-bottom: 10px;" Typo="Typography.H4">Zaloguj się do aplikacji</FluentLabel>
+        <EditForm Model="_command" OnValidSubmit="Save">
+            <DataAnnotationsValidator />
+            <FluentStack Orientation="Orientation.Vertical">
+                <FluentTextField id="login" Style="width: 100%" Label="Wprowadź adres e-mail:" @bind-Value="_command.Email"
+                                 TextFieldType="TextFieldType.Email"
+                                 Placeholder="Adres e-mail" />
+                <FluentValidationMessage For="@(() => _command.Email)" />
+
+                <FluentTextField id="password" Style="width: 100%" Label="Wprowadź hasło:" @bind-Value="_command.Password"
+                                 TextFieldType="TextFieldType.Password"
+                                 Placeholder="Hasło" />
+                <FluentValidationMessage For="@(() => _command.Password)" />
+                <FluentStack HorizontalAlignment="HorizontalAlignment.End">
+
+                    <FluentLabel Style="font-size: 0.8125rem; margin-right: 45px;"
+                                 Typo="Typography.Body">
+                        Nie masz konta?
+                        <a style="text-decoration:none;" href="/rejestracja">Zarejestruj się</a>
+                    </FluentLabel>
+
+
+                    @if (_savingData)
+                    {
+                        <FluentButton Style="margin-top: 15px;" Disabled="true">
+                            <FluentStack Orientation="Orientation.Horizontal">
+                                <FluentProgressRing Width="15px"></FluentProgressRing>
+                                Logowanie..
+                            </FluentStack>
+                        </FluentButton>
+
+                    }
+                    else
+                    {
+                        <FluentButton Style="margin-top: 15px;" Type="ButtonType.Submit">
+                            Zaloguj się
+                        </FluentButton>
+                    }
+                </FluentStack>
+
+            </FluentStack>
+
+        </EditForm>
+                
+    </div>
+</FluentStack>
+

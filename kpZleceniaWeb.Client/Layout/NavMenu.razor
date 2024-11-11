@@ -1,0 +1,36 @@
+﻿<div class="navmenu">
+    <input type="checkbox" title="Menu expand/collapse toggle" id="navmenu-toggle" class="navmenu-icon" />
+    <label for="navmenu-toggle" class="navmenu-icon"><FluentIcon Value="@(new Icons.Regular.Size20.Navigation())" Color="Color.Fill" /></label>
+    <nav class="sitenav" aria-labelledby="main-menu">
+        <FluentNavMenu Id="main-menu" Title="Main menu" CustomToggle="true">
+            <FluentNavLink Href="/" Match="NavLinkMatch.All" Icon="@(new Icons.Regular.Size20.Home())" IconColor="Color.Accent"><h3>Home</h3></FluentNavLink>
+            <FluentNavGroup Icon="@(new Icons.Regular.Size20.Book())">
+                <TitleTemplate>
+                    <h3>Zlecenia</h3>
+                </TitleTemplate>
+                <ChildContent>
+                    <FluentNavLink Href="zlecenia/zlecenialista" Icon="@(new Icons.Regular.Size20.Document())"><h3>Lista Zleceń</h3></FluentNavLink>
+                    <FluentNavLink Href="zlecenia/add" Icon="@(new Icons.Regular.Size20.DocumentAdd())"><h3>Dodaj Zlecenie</h3></FluentNavLink>
+                </ChildContent>
+                
+            </FluentNavGroup>
+            <FluentNavGroup Icon="@(new Icons.Regular.Size20.AlignBottom())">
+                <TitleTemplate>
+                    <h3>Indeksy</h3>
+                </TitleTemplate>
+                <ChildContent>
+                    <FluentNavLink Href="indeksy/typurzadzenialista" 
+                    Icon="@(new Icons.Regular.Size20.BeakerAdd())">Typy urządzeń</FluentNavLink>
+                    <FluentNavLink Href="indeksy/typzlecenielista" 
+                    Icon="@(new Icons.Regular.Size20.ClipboardTaskAdd())">Statusy zamówień</FluentNavLink>
+                    <FluentNavLink Href="klient/klientlista"
+                                   Icon="@(new Icons.Regular.Size20.PersonAdd())">Klienci</FluentNavLink>
+                </ChildContent>
+            </FluentNavGroup>
+            <FluentNavLink Href="settings" Icon="@(new Icons.Regular.Size20.Settings())"><h3>Ustawienia</h3></FluentNavLink>
+            <FluentNavLink Href="wyloguj" Icon="@(new Icons.Regular.Size20.PersonArrowRight())" ><h3>Wyloguj się</h3></FluentNavLink>
+        </FluentNavMenu>
+    </nav>
+</div>
+
+

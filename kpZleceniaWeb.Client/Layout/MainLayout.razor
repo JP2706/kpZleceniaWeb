@@ -1,0 +1,75 @@
+﻿@using kpZleceniaWeb.Client.Models
+@using kpZleceniaWeb.Client.Pages
+@using kpZleceniaWeb.Client.Pages.Authorization
+@using Microsoft.AspNetCore.Components.Authorization
+@inherits LayoutComponentBase
+    <FluentToastProvider RemoveToastsOnNavigation="false" Timeout="4000" />
+    <FluentDialogProvider />
+    <FluentTooltipProvider />
+    <FluentMessageBarProvider />
+    <FluentMenuProvider />
+    <FluentKeyCodeProvider />
+
+    <AuthorizeView>
+        <Authorized Context="AuthContext">
+            <FluentLayout>
+            <FluentHeader Height="50" Class="siteheader">
+                @if (_czyGlobalAdmin)
+                {
+                    <div style="position: absolute; left: 50%; right: 50%; transform: translate(-50%, -50%);">
+                        <FluentBadge Fill="somevalue" BackgroundColor="red" Color="white">
+                            <strong>Tryb administratora</strong>
+                        </FluentBadge>
+                    </div>
+                }
+                else if (_czyBrakFirmy)
+                {
+                    <div style="position: absolute; left: 50%; right: 50%; transform: translate(-50%, -50%);">
+                        <FluentBadge OnClick="AddFirma" Fill="somevalue" BackgroundColor="red" Color="white">
+                            <strong>Brak firmy</strong>
+                        </FluentBadge>
+                    </div>
+                }
+                    kpZlecenia
+                    <FluentSpacer />
+                    @if(string.IsNullOrEmpty(_nazwaFirmy))
+                    {
+                        @("(Nazwa Firmy)")
+                    }
+                    else
+                    {
+                        @_nazwaFirmy
+                    }
+                
+                    <div class="navmenu-icon-wiz"></div>
+                </FluentHeader>
+                <FluentStack Class="body-stack" Orientation="Orientation.Horizontal" Width="100%" HorizontalGap="0">
+                    <NavMenu />
+                    <FluentBodyContent id="body-content" Style="height: calc(100dvh - 90px); padding:15px;">
+                        <CascadingValue Value="_lastUrlCascade">
+                            <CascadingValue Value="_czyBrakFirmy">
+                                @Body
+                            </CascadingValue>
+                        </CascadingValue>
+                    </FluentBodyContent>
+                </FluentStack>
+                <FluentFooter Style="height: 40px;">
+                    <div class="version">
+                        <small>
+                            Wersja: @GlobalStaticParameters.GetVersion().ToString()
+                        </small>
+                    </div>
+                    <FluentSpacer />
+                    <div class="copy">
+                        <small>Created by KP</small>
+                    </div>
+
+                </FluentFooter>
+            </FluentLayout>
+        </Authorized>
+        <NotAuthorized>
+            <RedirectToLogin></RedirectToLogin>
+        </NotAuthorized>
+    </AuthorizeView>
+
+

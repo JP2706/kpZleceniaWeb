@@ -1,0 +1,85 @@
+﻿@page "/user/{UserId:guid}"
+@inherits KpBaseForm
+
+<PageTitle>Użytkownik - @_command.Email</PageTitle> 
+
+@if(_isLoading)
+{
+    <Loading Loading_="_isLoading" />
+}
+else
+{
+    <FluentGrid>
+        <FluentGridItem lg="2">
+
+        </FluentGridItem>
+        <FluentGridItem lg="8">
+            <div class="platf">
+                <FluentLabel Typo="Typography.H6" >Ustawinie użytkownika</FluentLabel>
+                <EditForm Model="_command" OnValidSubmit="SaveUser">
+                    <DataAnnotationsValidator />
+                    <div class="borderStackDiv mt-10">
+                        <div style="margin:10px;">
+                            <FluentLabel Style="margin-bottom: 10px;">Ogólne:</FluentLabel>
+                            <FluentStack Orientation="Orientation.Horizontal">
+                                <FluentStack Orientation="Orientation.Vertical">
+                                    <FluentLabel>E-mail:</FluentLabel>
+                                    <FluentTextField @bind-Value="_command.Email" Style="width:100%;" />
+                                    <FluentValidationMessage For="() => _command.Email" />
+                                </FluentStack>
+                                <FluentStack Orientation="Orientation.Vertical">
+                                    <FluentLabel>Imię:</FluentLabel>
+                                    <FluentTextField @bind-Value="_command.FirstName" Style="width:100%;" />
+                                    <FluentValidationMessage For="() => _command.FirstName" />
+                                </FluentStack>
+                                <FluentStack Orientation="Orientation.Vertical">
+                                    <FluentLabel>Nazwisko:</FluentLabel>
+                                    <FluentTextField @bind-Value="_command.LastName" Style="width:100%;" />
+                                    <FluentValidationMessage For="() => _command.LastName" />
+                                </FluentStack>
+                            </FluentStack>
+                            <FluentStack Orientation="Orientation.Horizontal">
+                                <FluentStack Orientation="Orientation.Vertical">
+                                    <FluentLabel>Hasło:</FluentLabel>
+                                    <FluentTextField Disabled="!_czyPasswordChanege" TextFieldType="TextFieldType.Password" @bind-Value="_command.Password" Style="width:100%;" />
+                                    <FluentValidationMessage For="() => _command.Password" />
+                                </FluentStack>
+                                <FluentStack Orientation="Orientation.Vertical">
+                                    <FluentLabel>Potwierdź Hasło:</FluentLabel>
+                                    <FluentTextField Disabled="!_czyPasswordChanege" TextFieldType="TextFieldType.Password" @bind-Value="_command.ConfirmPassword" Style="width:100%;" />
+                                    <FluentValidationMessage For="() => _command.ConfirmPassword" />
+                                </FluentStack>
+                            </FluentStack>
+                        </div>
+                    </div>
+                    <FluentStack Class="mt-10" Orientation="Orientation.Horizontal">
+                        <div class="borderStackDiv">
+                            <div style="margin:10px;">
+                                <FluentLabel Style="margin-bottom: 10px;">Uprawinienia:</FluentLabel>
+                                @foreach (var role in _command.Roles)
+                                {
+                                    <FluentCheckbox Disabled="RoleAccess(role.Key)" Label="@role.Key" Value="@role.Value" ValueChanged="@(() => RoleValueChange(role.Key))" />
+                                }
+                            </div>
+                        </div>
+                    </FluentStack>
+                    <FluentStack HorizontalAlignment="HorizontalAlignment.End">
+                        <FluentButton Class="mt-10" Type="ButtonType.Submit">Zapisz</FluentButton>
+                    </FluentStack> 
+                    
+                </EditForm>
+            </div>
+        </FluentGridItem>
+        <FluentGridItem lg="2">
+
+        </FluentGridItem>
+    </FluentGrid>
+}
+
+<style>
+    .borderStackDiv {
+        border: 1px solid grey;
+        border-radius: 5px;
+        width: 100%;
+    }
+</style>

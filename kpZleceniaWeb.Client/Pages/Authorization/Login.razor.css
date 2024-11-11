@@ -1,0 +1,34 @@
+﻿.login-form {
+    box-shadow: rgba(0, 0, 0, 0.15) 0px 5px 15px;
+    border-radius: 1rem;
+    min-width: 390px;
+    max-width: 390px;
+    padding: 2rem;
+}
+
+.logo {
+    max-width: 250px;
+}
+
+.alert {
+    padding: 12px;
+    margin-bottom: 20px;
+    border: 1px solid transparent;
+    border-radius: 4px;
+    font-size:17px;
+}
+   
+.alert-danger {
+    /*background-color: #f2dede;*/
+    border-color: #FC0902;
+    color: #FC0902;
+    text-align:center;
+}
+
+    .alert-danger hr {
+        border-top-color: #e4b9c0;
+    }
+
+    .alert-danger .alert-link {
+        color: #843534;
+    }

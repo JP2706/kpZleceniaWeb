@@ -1,0 +1,148 @@
+﻿@using kpZleceniaWeb.Shared.Zlecenie.Dto
+@inherits KpBaseForm
+@page "/zlecenia/zlecenialista"
+@page "/zlecenia/lastzlecenialista/{KlientId:int}"
+
+<PageTitle>Lista Zleceń</PageTitle>
+
+@if (NavigationManager.Uri.Contains("lastzlecenialista"))
+{
+    @if (_isLoading)
+    {
+        <Loading Loading_="_isLoading" />
+    }
+    else
+    {
+        <FluentGrid>
+            <FluentGridItem lg="1">
+
+            </FluentGridItem>
+            <FluentGridItem lg="10">
+                <FluentLabel Weight="FontWeight.Bold" Typo="Typography.Subject" style="margin-bottom:10px;">@("Ostatnie zlecenia - " + KlientNazwa())</FluentLabel>
+                <div class="platf">
+                    <FluentDataGrid AutoFit="true" TGridItem="GetKlientLastZleceniaDto" Items="_klientLastZleceniaLista.AsQueryable()" Pagination="_dtgZlecenieListaPagination">
+                        <EmptyContent>
+                            <FluentLabel>Brak danych do wyświetlenia!</FluentLabel>
+                        </EmptyContent>
+                        <ChildContent>
+                            <PropertyColumn Sortable="true" Property="x => x.Symbol" />
+                            <PropertyColumn Sortable="true" Property="x => x.Urzadzenie" Title="Urządzenie" />
+                            <TemplateColumn Sortable="true" Title="Data">
+                                @if (context.DataWydania != null)
+                                {
+                                    @("Wydania: " + context.DataWydania.Value.ToShortDateString())
+                                    ;
+                                }
+                                else if (context.DataZakRealizacji != null)
+                                {
+                                    @("Zakończenia Realizacji: " + context.DataZakRealizacji.Value.ToShortDateString())
+                                    ;
+                                }
+                                else if (context.DataRozpoczRealizacji != null)
+                                {
+                                    @("Rozpoczęcia Realizacji: " + context.DataRozpoczRealizacji.Value.ToShortDateString())
+                                    ;
+                                }
+                                else
+                                {
+                                    @("Przyjęcia: " + context.DataPrzyjecie.ToShortDateString())
+                                    ;
+                                }
+                            </TemplateColumn>
+                            <PropertyColumn Sortable="true" Property="x => x.ZlecenieStatus" Title="Status zamówienia" />
+                            <TemplateColumn Class="multiline-text">
+                                <FluentButton OnClick="@(() => ZmienStatusZlecLast(context))">Zmień status</FluentButton>
+                                <FluentButton Disabled="CzyEdit()" OnClick="@(() => EditOnClick(context.Id))">Edytuj</FluentButton>
+                                @* <FluentButton Disabled="CzyDeleteLast(context)" OnClick="@(() => DeleteOnClick(context.Id))">Usuń</FluentButton> *@
+                            </TemplateColumn>
+                        </ChildContent>
+                    </FluentDataGrid>
+                    <FluentPaginator State="_dtgZlecenieListaPagination">
+                        <SummaryTemplate>
+                            Liczba rekordów: <strong>@(_dtgZlecenieListaPagination.TotalItemCount)</strong>
+                        </SummaryTemplate>
+                        <PaginationTextTemplate>
+                            Strona <strong>@(_dtgZlecenieListaPagination.CurrentPageIndex + 1)</strong> z
+                            <strong>@(_dtgZlecenieListaPagination.LastPageIndex + 1)</strong>
+                        </PaginationTextTemplate>
+                    </FluentPaginator>
+                </div>
+            </FluentGridItem>
+            <FluentGridItem lg="1">
+
+            </FluentGridItem>
+        </FluentGrid>
+    }
+}
+else
+{
+    @if (_isLoading)
+    {
+        <Loading Loading_="_isLoading" />
+    }
+    else
+    {
+        <FluentGrid>
+            <FluentGridItem lg="1">
+
+            </FluentGridItem>
+            <FluentGridItem lg="10">
+                <div class="platf">
+                    <FluentDataGrid AutoFit="true" TGridItem="GetZlecenieDto" Items="_dtgZlecenieLista.AsQueryable()" Pagination="_dtgZlecenieListaPagination">
+                        <EmptyContent>
+                            <FluentLabel>Brak danych do wyświetlenia!</FluentLabel>
+                        </EmptyContent>
+                        <ChildContent>
+                            <PropertyColumn Sortable="true" Property="x => x.Symbol" />
+                            <PropertyColumn Sortable="true" Property="x => x.Urzadzenie" Title="Urządzenie" />
+                            <TemplateColumn Sortable="true" Title="Data">
+                                @if (context.DataWydania != null)
+                                {
+                                    @("Wydania: " + context.DataWydania.Value.ToShortDateString())
+                                    ;
+                                }
+                                else if (context.DataZakRealizacji != null)
+                                {
+                                    @("Zakończenia Realizacji: " + context.DataZakRealizacji.Value.ToShortDateString())
+                                    ;
+                                }
+                                else if (context.DataRozpoczRealizacji != null)
+                                {
+                                    @("Rozpoczęcia Realizacji: " + context.DataRozpoczRealizacji.Value.ToShortDateString())
+                                    ;
+                                }
+                                else
+                                {
+                                    @("Przyjęcia: " + context.DataPrzyjecie.ToShortDateString())
+                                    ;
+                                }
+                            </TemplateColumn>
+                            <PropertyColumn Sortable="true" Property="x => x.ZlecenieStatus" Title="Status zamówienia" />
+                            <TemplateColumn Class="multiline-text">
+                                <FluentButton OnClick="@(() => ZmienStatusZlec(context))">Zmień status</FluentButton>
+                                <FluentButton Disabled="CzyEdit()" OnClick="@(() => EditOnClick(context.Id))">Edytuj</FluentButton>
+                                <FluentButton Disabled="CzyDelete(context)" OnClick="@(() => DeleteOnClick(context.Id))">Usuń</FluentButton>
+                            </TemplateColumn>
+                        </ChildContent>
+                    </FluentDataGrid>
+                    <FluentPaginator State="_dtgZlecenieListaPagination">
+                        <SummaryTemplate>
+                            Liczba rekordów: <strong>@(_dtgZlecenieListaPagination.TotalItemCount)</strong>
+                        </SummaryTemplate>
+                        <PaginationTextTemplate>
+                            Strona <strong>@(_dtgZlecenieListaPagination.CurrentPageIndex + 1)</strong> z
+                            <strong>@(_dtgZlecenieListaPagination.LastPageIndex + 1)</strong>
+                        </PaginationTextTemplate>
+                    </FluentPaginator>
+                </div>
+            </FluentGridItem>
+            <FluentGridItem lg="1">
+
+            </FluentGridItem>
+        </FluentGrid>
+    }
+}
+
+
+
+

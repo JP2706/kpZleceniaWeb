@@ -1,0 +1,46 @@
+﻿@using kpZleceniaWeb.Client.Models.Components.Dialog
+@using kpZleceniaWeb.Shared.Klient.Command
+@implements IDialogContentComponent<AddEditKlientCommand>
+
+<FluentDialogHeader>
+    <FluentLabel>Dodaj klienta</FluentLabel>
+</FluentDialogHeader>
+<EditForm Model="Content" OnValidSubmit="SaveDialog">
+    <DataAnnotationsValidator />
+    <FluentDialogBody>
+            <FluentStack Orientation="Orientation.Horizontal" HorizontalAlignment="HorizontalAlignment.Center">
+                <FluentStack VerticalGap="2" Orientation="Orientation.Vertical">
+                    <FluentTextField @bind-Value="Content.Imie" Label="Imię:" Required/>
+                    <FluentValidationMessage For="() => Content.Nazwa"/>
+                </FluentStack>
+                <FluentStack VerticalGap="2" Orientation="Orientation.Vertical">
+                    <FluentTextField @bind-Value="Content.Nazwisko" Label="Nazwisko:" Required />
+                    <FluentValidationMessage For="() => Content.Nazwisko" />
+                </FluentStack>
+            </FluentStack>
+        <FluentStack Orientation="Orientation.Horizontal" HorizontalAlignment="HorizontalAlignment.Center">
+                <FluentStack VerticalGap="2" Orientation="Orientation.Vertical">
+                    <FluentTextField @bind-Value="Content.Nazwa" Label="Nazwa:" />
+                </FluentStack>
+                <FluentStack VerticalGap="2" Orientation="Orientation.Vertical">
+                    <FluentTextField @bind-Value="Content.Tel" Label="Telefon:" Required />
+                    <FluentValidationMessage For="() => Content.Tel" />
+                </FluentStack>
+            </FluentStack>
+    </FluentDialogBody>
+    <FluentDialogFooter>
+        <FluentButton Type="ButtonType.Submit">Zapisz</FluentButton>
+    </FluentDialogFooter>
+</EditForm>
+@code {
+    
+    [Parameter]
+    public AddEditKlientCommand Content { get; set; }
+    [CascadingParameter]
+    public FluentDialog Dialog { get; set; }
+
+    private async Task SaveDialog()
+    {
+        await Dialog.CloseAsync(Content);
+    }
+}

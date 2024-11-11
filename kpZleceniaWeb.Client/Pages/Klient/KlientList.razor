@@ -1,0 +1,58 @@
+﻿@inherits KpBaseForm
+@page "/klient/klientlista"
+@using kpZleceniaWeb.Client.Models
+@using kpZleceniaWeb.Shared.Klient.Dto
+
+<PageTitle>Lista klientów</PageTitle>
+
+@if(_isLoading)
+{
+    <Loading Loading_="_isLoading" />
+}
+else
+{
+    <FluentGrid>
+        <FluentGridItem lg="2">
+
+        </FluentGridItem>
+        <FluentGridItem lg="8">
+            <FluentStack Orientation="Orientation.Horizontal">
+                <FluentButton OnClick="() => AddEditKlient()">Dodaj</FluentButton>
+            </FluentStack>
+            <div class="platf mt-10">
+                <FluentDataGrid Pagination="_klientListaPagination" AutoFit="true" TGridItem="KlientRecord" Items="_klientList.AsQueryable()">
+                    <EmptyContent>
+                        <FluentLabel>Brak danych do wyświetlenia!</FluentLabel>
+                    </EmptyContent>
+                    <ChildContent>
+                        <PropertyColumn Sortable="true" Property="x => x.klientDto.Imie" Title="Imię" />
+                        <PropertyColumn Sortable="true" Property="x => x.klientDto.Nazwisko" Title="Nazwisko" />
+                        <PropertyColumn Sortable="true" Property="x => x.klientDto.Tel" Title="Telefon" />
+                        <TemplateColumn Sortable="true" Title="Nazwa">
+                            @(string.IsNullOrEmpty(context.klientDto.Imie) || string.IsNullOrEmpty(context.klientDto.Nazwa) ? "brak nazwy" : context.klientDto.Nazwa)
+                        </TemplateColumn>
+                        <TemplateColumn Class="multiline-text">
+                            <FluentButton OnClick="() => AddEditKlient(context.klientDto.Id)">Edytuj</FluentButton>
+                            <FluentButton OnClick="() => DeleteKlient(context.klientDto.Id)">Usuń</FluentButton>
+                            <FluentButton OnClick="() => GetKlientLastZlec(context.klientDto.Id)" Disabled="!context.czMaZlecenia">Ostatnie Zlecenia</FluentButton>
+                        </TemplateColumn>
+                    </ChildContent>
+                </FluentDataGrid>
+                <FluentPaginator State="_klientListaPagination">
+                    <SummaryTemplate>
+                        Liczba rekordów: <strong>@(_klientListaPagination.TotalItemCount)</strong>
+                    </SummaryTemplate>
+                    <PaginationTextTemplate>
+                        Strona <strong>@(_klientListaPagination.CurrentPageIndex + 1)</strong> z
+                        <strong>@(_klientListaPagination.LastPageIndex + 1)</strong>
+                    </PaginationTextTemplate>
+                </FluentPaginator>
+            </div>
+        </FluentGridItem>
+        <FluentGridItem lg="2">
+
+        </FluentGridItem>
+    </FluentGrid>
+}
+
+

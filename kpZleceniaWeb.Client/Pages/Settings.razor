@@ -1,0 +1,148 @@
+﻿@inherits KpBaseForm
+@page "/settings"
+@using kpZleceniaWeb.Client.Models
+@using kpZleceniaWeb.Shared.User.Dto
+
+<PageTitle>Ustawienia</PageTitle>
+
+@if(_isLoading)
+{
+    <Loading Loading_="_isLoading" />
+}
+else
+{
+    <FluentTabs>
+        <FluentTab Label="Główne">
+            <div class="borderStackDiv">
+                <div style="margin:10px;">
+                    <FluentLabel Style="margin-bottom: 10px;">Wygląd:</FluentLabel>
+                    <FluentDesignTheme @bind-Mode="@Mode"
+                                       @bind-OfficeColor="@OfficeColor"
+                                       StorageName="theme" />
+                    <FluentStack Orientation="Orientation.Horizontal">
+                        <FluentStack VerticalGap="0" Orientation="Orientation.Vertical">
+                            <FluentSelect Label="Tło:"
+                                          Width="250px"
+                                          Items="@(Enum.GetValues<DesignThemeModes>())"
+                                          @bind-SelectedOption="@Mode" />
+                        </FluentStack>
+                        <FluentStack VerticalGap="0" Orientation="Orientation.Vertical">
+                            <FluentSelect Label="Kolor:"
+                                          Items="@(Enum.GetValues<OfficeColor>().Select(i => (OfficeColor?)i))"
+                                          Height="200px"
+                                          Width="250px"
+                                          @bind-SelectedOption="@OfficeColor" />
+                        </FluentStack>
+                    </FluentStack>
+                </div>
+            </div>
+            @if (!CzyBrakFirma)
+            {
+                <div style="margin-top:10px;" class="borderStackDiv">
+                    <div style="margin:10px;">
+                        <FluentLabel Style="margin-bottom: 10px;">Firma:</FluentLabel>
+                        <EditForm Model="_firmaCommand" OnValidSubmit="SaveFirma">
+                            <FluentStack Orientation="Orientation.Horizontal">
+                                <FluentStack Orientation="Orientation.Vertical">
+                                    @* <FluentLabel>Nazwa:</FluentLabel> *@
+                                    <FluentTextField Style="width:100%;" Label="Nazwa:" @bind-Value="@_firmaCommand.Nazwa" />
+                                </FluentStack>
+                                <FluentStack Orientation="Orientation.Vertical">
+                                    @* <FluentLabel>Telefon:</FluentLabel> *@
+                                    <FluentTextField Style="width:100%;" Label="Telefon:" @bind-Value="@_firmaCommand.Telefon" />
+                                </FluentStack>
+                                <FluentStack Orientation="Orientation.Vertical">
+                                    @* <FluentLabel>Adres E-mail:</FluentLabel> *@
+                                    <FluentTextField Style="width:100%;" Label="Adres E-mail:" @bind-Value="@_firmaCommand.Email" />
+                                </FluentStack>
+                            </FluentStack>
+                            <FluentStack Class="mt-10" Orientation="Orientation.Horizontal">
+                                <FluentStack Orientation="Orientation.Vertical">
+                                    @* <FluentLabel>Ulica:</FluentLabel> *@
+                                    <FluentTextField Style="width:100%;" Label="Ulica:" @bind-Value="@_firmaCommand.Ulica" />
+                                </FluentStack>
+                                <FluentStack Orientation="Orientation.Vertical">
+                                    @* <FluentLabel>Numer domu:</FluentLabel> *@
+                                    <FluentTextField Style="width:100%;" Label="Numer domu:" @bind-Value="@_firmaCommand.NumerDomu" />
+                                </FluentStack>
+                                <FluentStack Orientation="Orientation.Vertical">
+                                    @* <FluentLabel>Numer Lokalu:</FluentLabel> *@
+                                    <FluentTextField Style="width:100%;" Label="Numer Lokalu:" @bind-Value="@_firmaCommand.NumerLokalu" />
+                                </FluentStack>
+                            </FluentStack>
+                            <FluentStack Class="mt-10" Orientation="Orientation.Horizontal">
+                                <FluentStack Orientation="Orientation.Vertical">
+                                    @* <FluentLabel>Miejscowosć:</FluentLabel> *@
+                                    <FluentTextField Label="Miejscowosć:" Style="width:100%;" @bind-Value="@_firmaCommand.Miejscowosc" />
+                                </FluentStack>
+                                <FluentStack Orientation="Orientation.Vertical">
+                                    @* <FluentLabel>Kod Pocztowy:</FluentLabel> *@
+                                    <FluentTextField Label="Kod Pocztowy:" Style="width:100%;" @bind-Value="@_firmaCommand.KodPocztowy" />
+                                </FluentStack>
+                                <FluentStack Orientation="Orientation.Vertical">
+                                    @* <FluentLabel>Poczta:</FluentLabel> *@
+                                    <FluentTextField Label="Poczta:" Style="width:100%;" @bind-Value="@_firmaCommand.Poczta" />
+                                </FluentStack>
+                            </FluentStack>
+                            <FluentTextArea Cols="50" ReadOnly="true" Label="Adres:" @bind-Value="_firmaAdres" />
+                            <FluentStack Class="mt-10" HorizontalAlignment="HorizontalAlignment.End">
+                                <FluentButton Type="ButtonType.Submit">Zapisz Firmę</FluentButton>
+                            </FluentStack>
+                        </EditForm>
+                    </div>
+                </div>
+            }
+        </FluentTab>
+        <FluentTab Label="Użytkownicy">
+            <FluentGrid>
+                <FluentGridItem lg="2">
+
+                </FluentGridItem>
+                <FluentGridItem lg="8">
+                    <div class="platf">
+                        <FluentDataGrid TGridItem="GetUserDto" Items="_users.AsQueryable()">
+                            <EmptyContent>
+                                <FluentLabel>Brak danych do wyświetlenia!</FluentLabel>
+                            </EmptyContent>
+                            <ChildContent>
+                                <TemplateColumn Sortable="true" Title="Imię i nazwisko">
+                                    @(context.FirstName + " " + context.LastName)
+                                </TemplateColumn>
+                                @if(CurrentUserRolesProvider.CzyGlobalAdminstrator(_currentUser))
+                                {
+                                    <TemplateColumn Sortable="true" Title="Czy usunięty">
+                                        @(context.IsDeleted ? "Tak" : "Nie")
+                                    </TemplateColumn>
+                                }
+                                <PropertyColumn Sortable="true" Property="x => x.Email" Title="Adres E-mail" />
+                                <PropertyColumn Sortable="true" Property="x => x.CreatedDate.ToShortDateString()" Title="Data utworzenia" />
+                                <TemplateColumn>
+                                    <FluentButton Disabled="CzyCanEdit(context.Id)" OnClick="@(() => EditUser(context.Id))">Edytuj</FluentButton>
+                                    <FluentButton Disabled="@(!CurrentUserRolesProvider.CzyGlobalAdminstrator(_currentUser))" OnClick="@(() => DeleteUser(context.Id))">Usuń</FluentButton>
+                                </TemplateColumn>
+                            </ChildContent>
+                        </FluentDataGrid>
+                    </div>
+                </FluentGridItem>
+                <FluentGridItem lg="2">
+
+                </FluentGridItem>
+            </FluentGrid>
+        </FluentTab>
+        @*< Microsoft.AspNetCore.Components.Authorization.AuthorizeView Roles="@CurrentUserRolesProvider.GlobalAdminstrator">
+            <FluentTab Label="Adminstracyjne">
+
+            </FluentTab>
+        </Microsoft.AspNetCore.Components.Authorization.AuthorizeView> *@
+    </FluentTabs>
+}
+
+
+
+<style>
+    .borderStackDiv {
+        border: 1px solid grey;
+        border-radius: 5px;
+        width: 100%;
+    }
+</style>

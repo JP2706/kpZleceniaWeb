@@ -1,0 +1,127 @@
+﻿@inherits KpBaseForm
+@page "/zlecenia/add"
+@page "/zlecenia/edit/{ZlecenieId:int}"
+@using kpZleceniaWeb.Shared.Common
+@using kpZleceniaWeb.Shared.Klient.Dto
+@using kpZleceniaWeb.Shared.Urzadzenie.TypUrzadzenia.Dto;
+
+<PageTitle>@(ZlecenieId == 0 ? "Dodaj zlecenie" : "Edytuj zlecenie")</PageTitle>
+
+@if(_isLoading)
+{
+    <Loading Loading_="_isLoading" />
+}
+else
+{
+    <FluentGrid>
+        <FluentGridItem lg="1">
+
+        </FluentGridItem>
+        <FluentGridItem lg="10">
+            <div class="platf">
+                <FluentStack VerticalAlignment="VerticalAlignment.Center" Style="margin-bottom:5px;">
+                    @if (ZlecenieId != 0 && !string.IsNullOrEmpty(LastUrlCascade))
+                    {
+                        <FluentButton OnClick="ReturnLastPageOnClick" IconStart="new Icons.Filled.Size24.ArrowLeft()" />
+                    }
+
+                    @if (ZlecenieId == 0)
+                    {
+                        <FluentLabel Weight="FontWeight.Bold" Typo="Typography.Subject">Dodaj zlecenie</FluentLabel>
+                    }
+                    else
+                    {
+                        <FluentLabel Weight="FontWeight.Bold" Typo="Typography.Subject">Edytuj zlecenie</FluentLabel>
+                    }
+
+                </FluentStack>
+                <EditForm Model="_command" OnValidSubmit="SaveZlecenie">
+                    <DataAnnotationsValidator />
+                    <FluentStack Orientation="Orientation.Horizontal">
+                        <FluentStack Orientation="Orientation.Vertical">
+                            <FluentLabel>Symbol:</FluentLabel>
+                            <FluentTextField @bind-Value="_command.Symbol"/>
+                            <FluentValidationMessage For="@(() => _command.Symbol)" />
+                        </FluentStack>
+                        <FluentStack Orientation="Orientation.Vertical">
+                            <FluentLabel>Numer Seryjny:</FluentLabel>
+                            <FluentTextField @bind-Value="_command.NumerSer" />
+                            <FluentValidationMessage For="@(() => _command.NumerSer)" />
+                        </FluentStack>
+                    </FluentStack>
+                    <FluentStack Class="mt-10" Orientation="Orientation.Vertical">
+                        <FluentLabel>Urządzenie:</FluentLabel>
+                        <FluentTextArea Style="width:100%;" @bind-Value="_command.Urzadzenie" />
+                        <FluentValidationMessage For="@(() => _command.Urzadzenie)" />
+                    </FluentStack>
+                    <FluentStack Class="mt-10" Orientation="Orientation.Horizontal">
+                        <FluentStack Orientation="Orientation.Vertical">
+                            <FluentLabel>Typ Urządzenia:</FluentLabel>
+                            <FluentSelect Style="width:100%;" TOption="pAppComboDto" Items="_cmbTypUrzadzenieList"
+                                            OptionText="@(x => x.Property["Nazwa"].ToString())" @bind-SelectedOption="_cmbTypUrzadzenieSelectedItem"
+                                            @bind-SelectedOption:after="CmbTypUrzadzenieAfterSelectedItem" />
+                            <FluentLabel>Klient:</FluentLabel>
+                            <FluentSelect Style="width:100%;" Items="_cmbKlientList" TOption="pAppComboDto" @bind-SelectedOption="_cmbKlientSelectedItem"
+                                            @bind-SelectedOption:after="CmbKlientAfterSelectedItem" OptionText="@(x => x.Property["ImieNazwisko"].ToString())" />
+                        </FluentStack>
+                        <FluentStack Orientation="Orientation.Vertical">
+                            <FluentLabel>Opis:</FluentLabel>
+                            <FluentTextArea Rows="5" Style="width:100%;" @bind-Value="_command.Opis" />
+                            <FluentValidationMessage For="@(() => _command.Opis)" />
+                        </FluentStack>
+                    </FluentStack>
+                    <FluentStack Class="mt-10" Orientation="Orientation.Horizontal">
+                        <FluentStack Orientation="Orientation.Vertical">
+                            <FluentLabel>Opis Usterki:</FluentLabel>
+                            <FluentTextArea Rows="4" Style="width:100%;" @bind-Value="_command.OpisUsterki"/>
+                            <FluentValidationMessage For="@(() => _command.OpisUsterki)" />
+                            <FluentLabel Style="margin-top:10px;">Status zamówienia:</FluentLabel>
+                            <FluentSelect Style="width:100%;" TOption="pAppComboDto" Items="_cmbZlecenieStatusLista"
+                                            OptionText="@(x => x.Property["Nazwa"].ToString())" @bind-SelectedOption="_cmbZlecenieStatusSelectedItem"
+                                            @bind-SelectedOption:after="CmbZlecenieStatusAfterSelectedItem" />
+                            <FluentValidationMessage For="@(() => _command.ZlecenieStatusId)" />
+                        </FluentStack>
+                    </FluentStack>
+                    <FluentStack Class="mt-10" Orientation="Orientation.Horizontal">
+                        <FluentStack Orientation="Orientation.Vertical">
+                            <FluentLabel>Data Przyjęcia:</FluentLabel>
+                            <FluentDatePicker @bind-Value="_command.DataPrzyjecie" />
+                            <FluentValidationMessage For="@(() => _command.DataPrzyjecie)" />
+                        </FluentStack>
+                        <FluentStack Orientation="Orientation.Vertical">
+                            <FluentLabel>Data Rozpoczęcia Realizacji:</FluentLabel>
+                            <FluentDatePicker @bind-Value="_command.DataRozpoczRealizacji" />
+                            <FluentValidationMessage For="@(() => _command.DataRozpoczRealizacji)" />
+                        </FluentStack>
+                    </FluentStack>
+                    <FluentStack Class="mt-10" Orientation="Orientation.Horizontal">
+                        <FluentStack Orientation="Orientation.Vertical">
+                            <FluentLabel>Data Zakończenia Przyjęcia:</FluentLabel>
+                            <FluentDatePicker @bind-Value="_command.DataZakRealizacji" />
+                            <FluentValidationMessage For="@(() => _command.DataZakRealizacji)" />
+                        </FluentStack>
+                        <FluentStack Orientation="Orientation.Vertical">
+                            <FluentLabel>Data Wydania:</FluentLabel>
+                            <FluentDatePicker @bind-Value="_command.DataWydania" />
+                            <FluentValidationMessage For="@(() => _command.DataWydania)" />
+                        </FluentStack>
+                    </FluentStack>
+                    <FluentStack Style="margin-top:10px;" HorizontalAlignment="HorizontalAlignment.End">
+                        <FluentButton Type="ButtonType.Submit">Zapisz</FluentButton>
+                    </FluentStack>
+                </EditForm>
+            </div>
+        </FluentGridItem>
+        <FluentGridItem lg="1">
+
+        </FluentGridItem>
+    </FluentGrid>
+}
+
+
+
+<style>
+    fluent-text-field {
+        width: 100%;
+    }
+</style>

@@ -1,0 +1,43 @@
+﻿@page "/error"
+
+<PageTitle>Wystąpił błąd</PageTitle>
+
+<FluentCard Height="auto">
+	<FluentStack Orientation="Orientation.Vertical" HorizontalAlignment="HorizontalAlignment.Center">
+		<FluentLabel Alignment="HorizontalAlignment.Center" Typo="Typography.PageTitle" Color="Color.Error">
+			<strong>
+				Wystąpił nieoczekiwany bład! Spróbuj
+				ponownie lub skontaktuj się z administratorem.
+			</strong>
+		</FluentLabel>
+		<FluentButton OnClick="OnHome">Przejdź do strony głownej</FluentButton>
+	</FluentStack>
+</FluentCard>
+
+@* <div class="card">
+	<div class="card-body">
+		<div class="row">
+			<div class="col text-danger text-center fs-1" role="alert">
+				Wystąpił błąd. Spróbuj ponownie lub skontakuj się z administratorem.
+			</div>
+		</div>
+	</div>
+</div>
+<div class="row">
+	<div class="col text-md-center m-5 text-primary">
+		<a href="/" class="btn btn-primary">
+			Przejdź do strony głównej
+		</a>
+	</div>
+</div> *@
+
+@code{
+
+	[Inject]
+	public NavigationManager NavigationManager { get; set; }
+
+	private void OnHome()
+	{
+		NavigationManager.NavigateTo("");
+	}
+}

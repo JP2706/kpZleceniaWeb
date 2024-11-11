@@ -1,0 +1,21 @@
+﻿<Microsoft.AspNetCore.Components.Authorization.CascadingAuthenticationState>
+    <Router AppAssembly="typeof(Program).Assembly">
+        <Found Context="routeData">
+            <RouteView RouteData="routeData" DefaultLayout="typeof(Layout.MainLayout)" />
+            <FocusOnNavigate RouteData="routeData" Selector="h1" />
+        </Found>
+    </Router>
+</Microsoft.AspNetCore.Components.Authorization.CascadingAuthenticationState>
+
+
+@code {
+    @inject IJSRuntime jsRuntime;
+
+    protected override async Task OnAfterRenderAsync(bool firstRender)
+    {
+        if (firstRender)
+        {
+            await jsRuntime.InvokeVoidAsync("deleteElementById", "loading");
+        }
+    }
+}

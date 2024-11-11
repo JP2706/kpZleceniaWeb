@@ -1,0 +1,17 @@
+﻿<FluentOverlay @bind-Visible=@Loading_
+               Opacity="0.4"
+               Alignment="Align.Center"
+               Justification="JustifyContent.Center"
+               Dismissable="false">
+    <FluentStack Orientation="Orientation.Vertical" HorizontalAlignment="HorizontalAlignment.Center"
+                 VerticalAlignment="VerticalAlignment.Center">
+        <FluentProgressRing Width="50px" />
+        <FluentLabel Typo="Typography.H5">Trwa ładowanie...</FluentLabel>
+    </FluentStack>
+
+</FluentOverlay>
+
+@code {
+    [Parameter]
+    public bool Loading_ { get; set; }
+}

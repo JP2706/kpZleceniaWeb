@@ -1,0 +1,41 @@
+﻿@using kpZleceniaWeb.Client.Models.Components.Dialog
+@using kpZleceniaWeb.Shared.Urzadzenie.TypUrzadzenia.Command
+@implements IDialogContentComponent<AddEditBaseDialogModel>
+
+<FluentDialogHeader>
+ <FluentLabel>@Content.Title</FluentLabel>
+</FluentDialogHeader>
+<FluentDialogBody>
+    <FluentStack Orientation="Orientation.Vertical" HorizontalAlignment="HorizontalAlignment.Center" VerticalAlignment="VerticalAlignment.Center">
+        <FluentTextField Label="@Content.NazwaEtykieta" @bind-Value="Content.Nazwa" Required/>
+        @if (!string.IsNullOrEmpty(_nazwaErrorMessage))
+        {
+            <FluentLabel Color="Color.Error">@_nazwaErrorMessage</FluentLabel>
+        }
+    </FluentStack>
+</FluentDialogBody>
+<FluentDialogFooter>
+    <FluentButton OnClick="SaveDialog">Zapisz</FluentButton>
+</FluentDialogFooter>
+
+@code {
+    #region PrivateParams
+    private string _nazwaErrorMessage;
+    #endregion
+
+    [Parameter]
+    public AddEditBaseDialogModel Content { get; set; }
+    [CascadingParameter]
+    public FluentDialog Dialog { get; set; }
+
+    private async Task SaveDialog()
+    {
+        if(string.IsNullOrEmpty(Content.Nazwa))
+        {
+            _nazwaErrorMessage = "Pole 'Nazwa' jest wymagane.";
+            StateHasChanged();
+            return;
+        }
+        await Dialog.CloseAsync(Content);
+    }
+}

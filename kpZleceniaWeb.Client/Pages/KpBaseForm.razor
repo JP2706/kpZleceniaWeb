@@ -1,0 +1,72 @@
+﻿@using Microsoft.AspNetCore.Components.Authorization
+@using System.Security.Claims
+@using kpZleceniaWeb.Client.Components.Dialog
+@using kpZleceniaWeb.Client.HttpInterceptor
+@using kpZleceniaWeb.Client.HttpRepository.Interfaces
+@using kpZleceniaWeb.Client.Models.Components.Dialog
+@using kpZleceniaWeb.Client.Services.Interfaces
+
+
+@code {
+    protected string _formName;
+    protected bool _isLoading;
+    protected ClaimsPrincipal _currentUser;
+
+    [CascadingParameter]
+    protected Task<AuthenticationState> AuthState { get; set; }
+
+    [CascadingParameter]
+    protected string LastUrlCascade { get; set; }
+
+    [CascadingParameter]
+    protected bool CzyBrakFirma { get; set; }
+
+    [Inject]
+    protected HttpInterceptorService Interceptor { get; set; }
+
+    #region Service
+    [Inject]
+    protected IDialogService DialogService { get; set; }
+    [Inject]
+    protected IToastService ToastService { get; set; }
+    [Inject]
+    protected ICurrentUserService CurrentUserService { get; set; }
+    [Inject]
+    protected NavigationManager NavigationManager { get; set; }
+    [Inject]
+    protected IKeyCodeService KeyCodeService { get; set; }
+    #endregion
+
+    #region HttpRepository
+    [Inject]
+    protected IUrzadzenieHttpRepository UrzadzenieHttpRepository { get; set; }
+    [Inject]
+    protected ISystemHttpRepository SystemHttpRepository { get; set; }
+    [Inject]
+    protected IZlecenieHttpRepository ZlecenieHttpRepository { get; set; }
+    [Inject]
+    protected IFirmaHttpRepository FirmaHttpRepository { get; set; }
+    [Inject]
+    protected IUserHttpRepository UserHttpRepository { get; set; }
+    [Inject]
+    protected IKlientHttpRepository KlientHttpRepository { get; set; }
+    #endregion
+
+    protected async Task<bool> OpenYesNoDialog(string title, string message)
+    {
+        var dialogParameters = new DialogParameters
+        {
+           
+        };
+        var dialogContent = new KPYesNoDialogModel(title, message);
+
+        var dialog = await DialogService.ShowDialogAsync<KpYesNoDialog>(dialogContent, dialogParameters);
+
+        var result = await dialog.Result;
+
+        if (result.Cancelled)
+            return false;
+        else
+            return true;
+    }
+}
