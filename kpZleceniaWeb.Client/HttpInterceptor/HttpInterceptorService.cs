@@ -86,7 +86,7 @@ namespace kpZleceniaWeb.Client.HttpInterceptor
                         break;
                 }
 
-                throw new HttpResponseException(message);
+                //throw new HttpResponseException(message);
             }
         }
     }

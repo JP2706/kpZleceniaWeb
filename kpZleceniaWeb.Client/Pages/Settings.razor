@@ -36,7 +36,7 @@ else
                     </FluentStack>
                 </div>
             </div>
-            @if (!CzyBrakFirma)
+            @if (!CzyBrakFirma && !CurrentUserRolesProvider.CzyPracownik(_currentUser))
             {
                 <div style="margin-top:10px;" class="borderStackDiv">
                     <div style="margin:10px;">
