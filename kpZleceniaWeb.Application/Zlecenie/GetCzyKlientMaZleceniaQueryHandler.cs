@@ -35,7 +35,7 @@ namespace kpZleceniaWeb.Application.Zlecenie
                 {
 
                     cmd.CommandType = System.Data.CommandType.StoredProcedure;
-                    cmd.CommandText = "GetCzyKlientMaZlecenia";
+                    cmd.CommandText = "pGetCzyKlientMaZlecenia";
                     cmd.Parameters.AddRange(parameters.ToArray());
 
                     await cmd.ExecuteNonQueryAsync();

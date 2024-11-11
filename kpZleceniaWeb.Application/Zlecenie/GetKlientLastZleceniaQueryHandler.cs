@@ -23,7 +23,7 @@ namespace kpZleceniaWeb.Application.Zlecenie
             };
 
 
-            return _context.Database.SqlQueryRaw<GetKlientLastZleceniaDto>("EXEC [dbo].[GetKlientLastZlecenia] @KlientId = @KlientId, @Ile = @Ile", parametry.ToArray()).ToList();
+            return _context.Database.SqlQueryRaw<GetKlientLastZleceniaDto>("EXEC [dbo].[pGetKlientLastZlecenia] @KlientId = @KlientId, @Ile = @Ile", parametry.ToArray()).ToList();
         }
     }
 }
